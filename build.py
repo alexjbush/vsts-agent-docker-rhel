@@ -2,10 +2,15 @@
 import re,os,shutil
 
 BUILD_DIR='build'
-configs={ 'CENTOS_VERSION': '7.2', 'CENTOS_VERSION_MINOR': '1511' } 
+configs={ 'CENTOS_VERSION': '7.2', 
+          'CENTOS_VERSION_MINOR': '1511',
+          'DOCKER_REPO': 'bushnoh/vsts-agent-docker-rhel',
+          'DOCKER_VERSION': '1.13.1',
+          'DOCKER_SHA256': '97892375e756fd29a304bd8cd9ffb256c2e7c8fd759e12a55a6336e15100ad75',
+          'DOCKER_COMPOSE_VERSION': '1.11.2' } 
 
 def parse_template_string(input_string,configs):
-    pattern = re.compile('%%([A-Z_]+)%%')
+    pattern = re.compile('%%([0-9A-Z_]+)%%')
     output_string = input_string
     for match in pattern.findall(input_string):
         if match not in configs.keys():
@@ -28,6 +33,8 @@ def template_file(input_filename, templated_output_filename, configs,assets=[]):
 def main():
     base_file='centos/%%CENTOS_VERSION%%/Dockerfile'
     template_file('{}.{}'.format(base_file,'template'),'{}/{}'.format(BUILD_DIR,base_file),configs,['start.sh']) 
+    base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/Dockerfile'
+    template_file('{}.{}'.format(base_file,'template'),'{}/{}'.format(BUILD_DIR,base_file),dict(configs,BASE_IMAGE_TAG='centos-7.2')) 
 
 if __name__ == "__main__":
     main()
