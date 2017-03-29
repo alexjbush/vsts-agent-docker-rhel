@@ -1,0 +1,23 @@
+FROM centos:%%CENTOS_VERSION%%.%%CENTOS_VERSION_MINOR%%
+ENV CENTOS_VERSION=%%CENTOS_VERSION%%
+
+RUN yum -y install \
+       deltarpm \
+       epel-release \
+       unzip \
+       libunwind \
+       gettext\
+       libcurl-devel \
+       openssl-devel \
+       zlib \
+       libicu-devel \
+ && yum -y install \
+       jq \
+ && yum clean all
+
+WORKDIR /vsts
+
+COPY ./start.sh .
+RUN chmod +x start.sh
+
+CMD ["./start.sh"]
