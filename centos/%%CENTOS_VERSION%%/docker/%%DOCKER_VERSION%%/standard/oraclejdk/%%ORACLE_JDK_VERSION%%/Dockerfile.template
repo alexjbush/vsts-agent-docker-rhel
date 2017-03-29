@@ -1,0 +1,11 @@
+FROM %%DOCKER_REPO%%:%%BASE_IMAGE_TAG%%
+
+RUN curl -L  -H 'Cookie:oraclelicense=accept-securebackup-cookie' \
+         -o jdk-linux-x64.rpm \
+         %%ORACLE_JDK_REPO_URL%% \
+ && yum -y install jdk-linux-x64.rpm \
+ && rm -rf jdk-linux-x64.rpm \
+ && alternatives --set java /usr/java/jdk%%ORACLE_JDK_VERSION%%/jre/bin/java
+ 
+# Configure environment variables
+ENV JAVA_HOME=/usr/java/jdk%%ORACLE_JDK_VERSION%%

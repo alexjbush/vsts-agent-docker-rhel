@@ -40,6 +40,12 @@ RUN curl -sL https://git.io/n-install | bash -s -- -ny - \
  && npm install -g bower grunt gulp n \
  && rm -rf ~/n
 
+RUN curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?linkid=843449 \
+ && mkdir -p /opt/dotnet \
+ && tar zxf dotnet.tar.gz -C /opt/dotnet \
+ && ln -s /opt/dotnet/dotnet /usr/local/bin \
+ && rm -rf dotnet.tar.gz
+
 # Configure environment variables
 ENV ANT_HOME=/usr/share/ant \
     bower=/usr/local/bin/bower \
