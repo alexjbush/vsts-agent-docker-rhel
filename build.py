@@ -32,9 +32,18 @@ def template_file(input_filename, templated_output_filename, configs,assets=[]):
 
 def main():
     base_file='centos/%%CENTOS_VERSION%%/Dockerfile'
-    template_file('{}.{}'.format(base_file,'template'),'{}/{}'.format(BUILD_DIR,base_file),configs,['start.sh']) 
+    template_file('{}.{}'.format(base_file,'template'),
+                  '{}/{}'.format(BUILD_DIR,base_file),
+                  configs,
+                  ['start.sh']) 
     base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/Dockerfile'
-    template_file('{}.{}'.format(base_file,'template'),'{}/{}'.format(BUILD_DIR,base_file),dict(configs,BASE_IMAGE_TAG='centos-7.2')) 
+    template_file('{}.{}'.format(base_file,'template'),
+                  '{}/{}'.format(BUILD_DIR,base_file),
+                  dict(configs,BASE_IMAGE_TAG='centos-7.2')) 
+    base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/standard/Dockerfile'
+    template_file('{}.{}'.format(base_file,'template'),
+                  '{}/{}'.format(BUILD_DIR,base_file),
+                  dict(configs,BASE_IMAGE_TAG='centos-7.2-docker-1.13.1',OPENJDK_VERSION='1.8.0')) 
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,7 @@ FROM centos:7.2.1511
 ENV CENTOS_VERSION=7.2
 
 RUN yum -y install \
+       yum-plugin-ovl \
        deltarpm \
        epel-release \
        unzip \

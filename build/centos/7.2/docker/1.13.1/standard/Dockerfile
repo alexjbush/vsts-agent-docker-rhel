@@ -1,0 +1,52 @@
+FROM bushnoh/vsts-agent-docker-rhel:centos-7.2-docker-1.13.1
+RUN yum -y install yum-plugin-ovl
+# Install packages
+RUN yum -y groupinstall 'Development Tools'
+RUN yum install -y \
+    # Basic utilities
+    curl \
+    bind-utils \
+    net-tools \
+    ftp \
+    iproute \
+    iputils \
+    openssh-clients \
+    sudo \
+    telnet \
+    time \
+    unzip \
+    wget \
+    zip \
+    # Python
+    python \
+    python34 \
+    # Java and related build tools
+    java-1.8.0-openjdk \
+    ant \
+    ant-contrib \
+    maven \
+ && yum clean all
+
+RUN wget https://services.gradle.org/distributions/gradle-2.4-all.zip -O /tmp/gradle-2.4-all.zip \
+ && mkdir -p /opt/gradle/2.4 \
+ && unzip /tmp/gradle-2.4-all.zip -d /tmp \
+ && mv /tmp/gradle-2.4/* /opt/gradle/2.4/ \
+ && ln -s /opt/gradle/2.4/ /opt/gradle/current \
+ && rm -rf /tmp/gradle-2.4-all.zip
+
+RUN ls /tmp/
+
+RUN curl -sL https://git.io/n-install | bash -s -- -ny - \
+ && ~/n/bin/n stable \
+ && npm install -g bower grunt gulp n \
+ && rm -rf ~/n
+
+# Configure environment variables
+ENV ANT_HOME=/usr/share/ant \
+    bower=/usr/local/bin/bower \
+    dotnet=/usr/bin/dotnet \
+    GRADLE_HOME=/opt/gradle/current \
+    PATH=$PATH:$GRADLE_HOME/bin \
+    grunt=/usr/local/bin/grunt \
+    JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk \
+    M2_HOME=/usr/share/maven \

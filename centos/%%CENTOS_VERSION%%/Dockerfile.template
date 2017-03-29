@@ -2,6 +2,7 @@ FROM centos:%%CENTOS_VERSION%%.%%CENTOS_VERSION_MINOR%%
 ENV CENTOS_VERSION=%%CENTOS_VERSION%%
 
 RUN yum -y install \
+       yum-plugin-ovl \
        deltarpm \
        epel-release \
        unzip \
