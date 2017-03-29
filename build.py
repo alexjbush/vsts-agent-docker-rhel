@@ -44,7 +44,9 @@ def main():
     base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/standard/Dockerfile'
     template_file('{}.{}'.format(base_file,'template'),
                   '{}/{}'.format(BUILD_DIR,base_file),
-                  dict(configs,BASE_IMAGE_TAG='centos-7.2-docker-1.13.1',OPENJDK_VERSION='1.8.0')) 
+                  dict(configs,BASE_IMAGE_TAG='centos-7.2-docker-1.13.1',
+                       OPENJDK_VERSION='1.8.0',
+                       GIT_VERSION='2.12.2')) 
     base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/standard/oraclejdk/%%ORACLE_JDK_VERSION%%/Dockerfile'
     oracle_vers='1.8.0_60'
     template_file('{}.{}'.format(base_file,'template'),

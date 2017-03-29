@@ -25,6 +25,12 @@ RUN yum install -y \
     ant \
     ant-contrib \
     maven \
+    curl-devel \
+    expat-devel \
+    gettext-devel \
+    openssl-devel \
+    zlib-devel \
+    perl-ExtUtils-MakeMaker \
  && yum clean all
 
 RUN wget https://services.gradle.org/distributions/gradle-2.4-all.zip -O /tmp/gradle-2.4-all.zip \
@@ -46,12 +52,21 @@ RUN curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?linkid=843449 \
  && ln -s /opt/dotnet/dotnet /usr/local/bin \
  && rm -rf dotnet.tar.gz
 
+RUN wget https://www.kernel.org/pub/software/scm/git/git-2.12.2.tar.gz \
+         -O /tmp/git-2.12.2.tar.gz \
+ && cd /tmp/ \
+ && tar xzf git-2.12.2.tar.gz \
+ && cd /tmp/git-2.12.2 \
+ && make prefix=/usr/local/git all \
+ && make prefix=/usr/local/git install \
+ && rm -rf /tmp/git-2.12.2.tar.gz /tmp/git-2.12.2
+
 # Configure environment variables
 ENV ANT_HOME=/usr/share/ant \
     bower=/usr/local/bin/bower \
     dotnet=/usr/bin/dotnet \
     GRADLE_HOME=/opt/gradle/current \
-    PATH=$PATH:$GRADLE_HOME/bin \
+    PATH=/usr/local/git/bin:$PATH:$GRADLE_HOME/bin \
     grunt=/usr/local/bin/grunt \
     JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk \
     M2_HOME=/usr/share/maven \
