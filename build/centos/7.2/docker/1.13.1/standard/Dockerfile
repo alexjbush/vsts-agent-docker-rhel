@@ -1,5 +1,5 @@
 FROM bushnoh/vsts-agent-docker-rhel:centos-7.2-docker-1.13.1
-RUN yum -y install yum-plugin-ovl
+
 # Install packages
 RUN yum -y groupinstall 'Development Tools'
 RUN yum install -y \
@@ -32,9 +32,8 @@ RUN wget https://services.gradle.org/distributions/gradle-2.4-all.zip -O /tmp/gr
  && unzip /tmp/gradle-2.4-all.zip -d /tmp \
  && mv /tmp/gradle-2.4/* /opt/gradle/2.4/ \
  && ln -s /opt/gradle/2.4/ /opt/gradle/current \
- && rm -rf /tmp/gradle-2.4-all.zip
-
-RUN ls /tmp/
+ && rm -rf /tmp/gradle-2.4-all.zip \
+ && rm -rf /tmp/gradle-2.4/
 
 RUN curl -sL https://git.io/n-install | bash -s -- -ny - \
  && ~/n/bin/n stable \
