@@ -14,7 +14,6 @@ RUN yum -y install \
        libicu-devel \
  && yum -y install \
        jq \
- && yum -y reinstall glibc-common \
  && yum clean all
 
 RUN localedef -i en_GB -f UTF-8 en_GB.UTF-8
