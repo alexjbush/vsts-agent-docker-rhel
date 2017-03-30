@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import re,os,shutil
 
-BUILD_DIR='build'
+BUILD_DIR='build/'
+SRC_DIR='src/'
 configs={ 'CENTOS_VERSION': '7.2', 
           'CENTOS_VERSION_MINOR': '1511',
           'DOCKER_REPO': 'bushnoh/vsts-agent-docker-rhel',
@@ -19,40 +20,34 @@ def parse_template_string(input_string,configs):
         output_string = re.sub('%%{}%%'.format(match),configs[match],output_string)
     return output_string
 
-def template_file(input_filename, templated_output_filename, configs,assets=[]):
-    input_path = os.path.dirname(input_filename)
-    output_filename = parse_template_string(templated_output_filename,configs)
-    output_path = os.path.dirname(output_filename)
+def template_file(src_tag, base_tag='', configs={},assets=[]):
+    input_path = SRC_DIR+src_tag+'/'
+    output_path = parse_template_string(BUILD_DIR+base_tag+'-'+src_tag+'/',configs)
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    with open(input_filename, 'r') as infile, open(output_filename, 'w') as outfile:
-        outfile.write(parse_template_string(infile.read(),configs))
+    with open(input_path+'Dockerfile.template', 'r') as infile, open(output_path+'Dockerfile', 'w') as outfile:
+        outfile.write(parse_template_string(infile.read(),dict(configs,BASE_IMAGE_TAG=base_tag)))
     for asset in assets:
         shutil.copyfile('{}/{}'.format(input_path,asset),'{}/{}'.format(output_path,asset))
     
 
 def main():
-    base_file='centos/%%CENTOS_VERSION%%/Dockerfile'
-    template_file('{}.{}'.format(base_file,'template'),
-                  '{}/{}'.format(BUILD_DIR,base_file),
-                  configs,
-                  ['start.sh']) 
-    base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/Dockerfile'
-    template_file('{}.{}'.format(base_file,'template'),
-                  '{}/{}'.format(BUILD_DIR,base_file),
-                  dict(configs,BASE_IMAGE_TAG='centos-7.2')) 
-    base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/standard/Dockerfile'
-    template_file('{}.{}'.format(base_file,'template'),
-                  '{}/{}'.format(BUILD_DIR,base_file),
-                  dict(configs,BASE_IMAGE_TAG='centos-7.2-docker-1.13.1',
+    template_file('centos-%%CENTOS_VERSION%%',
+                  configs=configs,
+                  assets=['start.sh']) 
+    template_file('docker-%%DOCKER_VERSION%%',
+                  'centos-7.2',
+                  configs)
+    template_file('standard',
+                  'centos-7.2-docker-1.13.1',
+                  dict(configs,
                        OPENJDK_VERSION='1.8.0',
                        GIT_VERSION='2.12.2')) 
-    base_file='centos/%%CENTOS_VERSION%%/docker/%%DOCKER_VERSION%%/standard/oraclejdk/%%ORACLE_JDK_VERSION%%/Dockerfile'
-    oracle_vers='1.8.0_60'
-    template_file('{}.{}'.format(base_file,'template'),
-                  '{}/{}'.format(BUILD_DIR,base_file),
-                  dict(configs,BASE_IMAGE_TAG='centos-7.2-docker-1.13.1-standard',
-                       ORACLE_JDK_VERSION=oracle_vers, ORACLE_JDK_REPO_URL=oracle_url_map['1.8.0_60'])) 
+    template_file('oracle-%%ORACLE_JDK_VERSION%%',
+                  'centos-7.2-docker-1.13.1-standard',
+                  dict(configs,
+                       ORACLE_JDK_VERSION='1.8.0_60',
+                       ORACLE_JDK_REPO_URL=oracle_url_map['1.8.0_60'])) 
 
 if __name__ == "__main__":
     main()
