@@ -61,6 +61,11 @@ RUN wget https://www.kernel.org/pub/software/scm/git/git-2.12.2.tar.gz \
  && make prefix=/usr/local/git install \
  && rm -rf /tmp/git-2.12.2.tar.gz /tmp/git-2.12.2
 
+RUN yum -y reinstall glibc-common \
+ && localedef -i en_US -f UTF-8 en_US.UTF-8 \
+ && localedef -i en_GB -f UTF-8 en_GB.UTF-8 \
+ && yum clean all
+
 # Configure environment variables
 ENV ANT_HOME=/usr/share/ant \
     bower=/usr/local/bin/bower \
