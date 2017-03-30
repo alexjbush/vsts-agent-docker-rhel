@@ -22,7 +22,8 @@ def parse_template_string(input_string,configs):
 
 def template_file(src_tag, base_tag='', configs={},assets=[]):
     input_path = SRC_DIR+src_tag+'/'
-    output_path = parse_template_string(BUILD_DIR+base_tag+'-'+src_tag+'/',configs)
+    new_tag = src_tag if not base_tag else base_tag+'-'+src_tag
+    output_path = parse_template_string(BUILD_DIR+new_tag+'/',configs)
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     with open(input_path+'Dockerfile.template', 'r') as infile, open(output_path+'Dockerfile', 'w') as outfile:
