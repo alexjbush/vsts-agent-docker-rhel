@@ -49,6 +49,11 @@ def main():
                   dict(configs,
                        ORACLE_JDK_VERSION='1.8.0_60',
                        ORACLE_JDK_REPO_URL=oracle_url_map['1.8.0_60'])) 
+    template_file('ansible-%%ANSIBLE_VERSION%%',
+                  'centos-7.2-docker-1.13.1',
+                  dict(configs,
+                       ANSIBLE_VERSION='v2.3.0.0-0.2.rc2',
+                       GIT_VERSION='2.12.2'))
 
 if __name__ == "__main__":
     main()
