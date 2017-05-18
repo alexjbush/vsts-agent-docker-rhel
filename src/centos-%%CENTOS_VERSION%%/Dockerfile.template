@@ -18,7 +18,7 @@ RUN yum -y install \
 
 # This is needed to check out submodules
 # https://gitlab.com/gitlab-org/gitlab-ci-multi-runner/issues/1914
-RUN mkdir ~/.ssh/
+RUN mkdir ~/.ssh/ \
  && echo -e "Host visualstudio.com\n	StrictHostKeyChecking no" > ~/.ssh/config
 
 RUN localedef -i en_GB -f UTF-8 en_GB.UTF-8
