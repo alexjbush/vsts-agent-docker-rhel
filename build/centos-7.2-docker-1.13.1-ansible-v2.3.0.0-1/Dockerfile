@@ -23,4 +23,4 @@ RUN yum -y reinstall glibc-common \
  && yum clean all
 
 RUN pip install --upgrade pip docker-py \
- && pip install git+git://github.com/ansible/ansible.git@v2.3.0.0-0.2.rc2
+ && pip install git+git://github.com/ansible/ansible.git@v2.3.0.0-1

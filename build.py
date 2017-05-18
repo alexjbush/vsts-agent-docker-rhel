@@ -52,7 +52,7 @@ def main():
     template_file('ansible-%%ANSIBLE_VERSION%%',
                   'centos-7.2-docker-1.13.1',
                   dict(configs,
-                       ANSIBLE_VERSION='v2.3.0.0-0.2.rc2',
+                       ANSIBLE_VERSION='v2.3.0.0-1',
                        GIT_VERSION='2.12.2'))
 
 if __name__ == "__main__":
